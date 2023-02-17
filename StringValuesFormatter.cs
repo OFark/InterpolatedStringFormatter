@@ -39,8 +39,18 @@ namespace InterpolatedStringFormatter
                 else
                 {
                     sb.Append(format, scanIndex, openBraceIndex - scanIndex + 1);
-                    sb.Append(_valueNames.Count.ToString(CultureInfo.InvariantCulture));
-                    _valueNames.Add(format.Substring(openBraceIndex + 1, formatDelimiterIndex - openBraceIndex - 1));
+                    var valueName = format.Substring(openBraceIndex + 1, formatDelimiterIndex - openBraceIndex - 1);
+                    var index = _valueNames.IndexOf(valueName);
+
+                    if (index >= 0)
+                    {
+                        sb.Append(index.ToString(CultureInfo.InvariantCulture));
+                    }
+                    else
+                    {
+                        sb.Append(_valueNames.Count.ToString(CultureInfo.InvariantCulture));
+                        _valueNames.Add(valueName);
+                    }
                     sb.Append(format, formatDelimiterIndex, closeBraceIndex - formatDelimiterIndex + 1);
 
                     scanIndex = closeBraceIndex + 1;
